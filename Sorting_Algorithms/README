@@ -1,0 +1,141 @@
+Name : Shehryar Malik (smalik02)
+Date : Nov. 5th. 2016
+
+All Sorts of Sorta Nice Sortin' Algorithms
+
+Purpose:
+  The purpose of this hw and program is use different algorithms
+  to sort data, inputed from console or a file.
+  The three main algorithms implemented are:
+    - Insertion Sort
+    - Quick Sort
+    - Radix Sort
+
+Acknowledgements:
+  - Shoutout to Mark for going over the main algorithms in class. I 
+  modeled my agorithms after his breakdown of the meta algorithms.
+
+  - Online help was really helpful. I used GeeksforGeeks for understanding
+  some of the code. In addition, wikipedia is amazing for understanding
+  the main algorithm
+
+Files & Purpose:
+  sorter.cpp: This file serves as the interface for the algorithms.
+        The main function analyzes the arguments, and determines
+        which alogirthm to run, if any. Furthermore, the file
+        handles the printing for the program.
+  
+  sortAlgs.cpp & sortAlgs.h:
+        These files serve as the definition and the implementation
+        of the algorithms. sortAlgs.h is the main user interface for
+        the program. sortAlgs.cpp is the implementation. The
+        algorithm implementation is broken down into helper functions
+
+Run & Compile:
+  Compile: clang++ -Wall -Wextra -g -std=c++11 sorter.cpp sortAlgs.cpp -o \
+      sorter
+  Run: ./sorter sortAlg outputMode [fileName]
+                where:  sortAlg is -s1, -s2, or -s3
+                and     outputMode is --print or --save
+
+Data Structures:
+
+  For this program, I used stl library of vectors. Firstly, we were required
+  to use vectors to implement our algorithms. I found vectors very helpful
+  because the push_back function is great. vector automatically increases
+  size; therefore, there is no need to expand manually. Another advantage
+  of vectors is that you can access an element directly by using []. 
+  One of the disadvantage of a vector is that it is an object, and therefore
+  more memory consumption. 
+
+
+Algorithms:
+  - Insertion Sort:
+    Insertion sort sorts the data by using the idea of an already sorted
+    subarray within the array, and then moves the unsorted data in its
+    appropriate location, one by one. 
+    To do so, insertion sort starts at the front, meaning that the
+    unsorted array is 0, or the first index. Then, the array is iterated
+    through by looking at one number at a time. A number is compared
+    to its left neighbor, one by one. If the left neighbor is less than
+    the current value, then you dont swap. Or, if the iterator reaches 0.
+    Reaching 0 means that everything left from the number we started
+    comparing for the current loop is sorted.
+
+    Big O: The runtime for insertion sort, at best, is O(n) if most of 
+    the list is already sorted. However, its worst, and at best, is
+    O(n^2). The reason for that runtime is that for every number in
+    the list, you have to compare it to every other number before it.
+    Therefore, you have to use two for loops (or for and a while) 
+    to compare with every number before it, for every number you
+    have to put in place.
+    Best = O(n)
+    Worst = Average = O(n^2)
+
+  - Quick Sort:
+    Quick Sort sorts the data using three main steps:
+      - It determines a pivot (the middle of the array in my algorithm)
+      - Then elements less than the pivot are moved to the left, and 
+        greater are moved to the right. This is occured numerous
+        time until pivot reaches the central point, the final
+        position.
+      - Then, the process is recurssed using the above steps, but
+        with the sub arrays, all the values less than the 
+        pivot, and all of the values greater than the pivot
+    Big O: The runtime for quick sort, at worst, is O(n^2), which is
+    rare. The reason for such runtime will be if the pivot chosen was the
+    front, and the items were really in a reverse order. On Average, and
+    on best case, the runtime is O(n logn). The reason being, it takes
+    log n to divide the array into smaller halves (less than or greater
+    than the pivots). Then, it takes n times to sort those items back.
+    Therefore, making the runtime O(n logn).
+    Best = Average = O(n logn)
+    Worst = O(n^2)
+
+  - Radix Sort:
+    Radix sort is non-comparison sorting algorithm. It is different than
+    quick and insertion sort. The main algorithm is divided into the
+    following steps:
+      - Create buckets for all possible numbers in a given digits place
+        which is equivalent to the base. So, in this case, 10.
+      - Then, sort the numbers into the bucket using the given digits
+        place.
+      - Then, a sorted array/vector is created using the buckets.
+        The first bucket is emptied first, i.e. numbers go first 
+        in the sorted array. 
+      - Then, the sorted vector is copied into the original vector.
+      - Process is repeated until the most significant digit is sorted
+      - At the end, you have a sorted array, and as Mark said, 
+        "Its MAGIC!!!!!!".
+    Big O: The time complexity of the algorithm is as follows: 
+    Suppose that the n input numbers have maximum w digits. Then the 
+    counting part, sorting based on each digit, is called w, Which makes
+    it O(w). As each number is visited for each digits place, in
+    determining the count, it is O(n). So the entire Radix Sort procedure
+    takes O(w*n) time. If the numbers are of finite size, the algorithm
+    runs in O(n) asymptotic time, as w will be a constant and is ignored
+    in Big O. 
+    Best: O(n)
+    Average: O(w*n)
+    Worst: It is also its average case, O(w*n)
+
+Testing: 
+  I really enjoyed doing this hw. Mostly because most of the key components
+  were independent of each other. For example, it didnt matter if I didnt
+  have my radix sort working, if I had my insertion sort working. 
+  I first worked on my sorter.cpp file, the user. I did that because I
+  wanted to have an interface working. Also, I wanted to spend time
+  reading about different algorithms before I delved into the coding.
+  For testing the sorter.cpp, I compiled to make sure there were not
+  many errors. I could not testing the file name and reading input, and
+  then I started working on my insertion sort. After finishing that, I
+  tested the console input and the file read in and out mode.
+
+  For testing the actual algorithms, I used empty data, already sorted,
+  completely random numbers (10, 1000, 100000), and some usual input.
+
+  I created output files and compared them with each other (for every set
+  of algorithm)
+
+  Overall, this hw was fun and not too bad, at least I think and I could
+  have done this all wrong! 

@@ -1,0 +1,6 @@
+f testRPN.rpnf
+30 +
+p
+F testRPN.rpnf
+p
+q

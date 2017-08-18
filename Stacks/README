@@ -1,0 +1,96 @@
+Shehryar Malik
+Comp 15
+Sep. 29. 2016
+
+CalcYouLater
+
+////////////////////////////////Purpose\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+	
+	The purpose of the program is to implement the Reverse Polar Notation
+	for the calculator.  The program utilizes a stack to add or remove
+	data from the list. The calculator being created is similar to the
+	dc calculator in UNIX. The program creates two classes, RPNCalc and
+	DoubleStack. RPNCalc runs the program, performs operations, calls
+	DoubleStack functions like pop and push. DoubleStack is used to store
+	the information. 
+
+///////////////////////////Acknowledgements\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+	
+	Jake Gilbert helped me out throughout the project.
+	Margaret Gorguissian helped understand how to use the double
+		converting file. 
+	Also, in general, ideas provided by the TA's and Mark in the helper
+		files helped me modify the functions such as read_from_file.
+
+//////////////////////////////////Files\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+	DoubleStack.h: 
+		This file implements the definition of the DoubleStack Class
+		The classes uses stacks to implement the class.
+		The class consists of functions such as clearing the stack,
+		pushing a new element, popping, etc. The program uses linked
+		list to implement the stack.
+
+	DoubleStack.cpp:
+		This file is the implementation of the DoubleStack.h file.
+		The file details the functions, such as push, which adds a
+		new element at the front of the list. The destructor uses 
+		the clear function, as in calls the function, because
+		both are trying to create an empty list. The functions are
+		used by the RPNCalc.cpp file to implement and use them in
+		the program(uses the actual calculator)
+
+	RPNCalc.h:
+		This file is the definition of the RPNCalc class. It contains
+		the private and public variables. It also includes the
+		DoubleStack.h file in order to access the functions to use
+		them in order to implement the RPN calculator
+
+	RPNCalc.cpp:
+		This file is the implementation of the RPNCalc.h. It details
+		functions like reading in files & interpreting the user input
+		Some of the function implementation was taken from the content
+		provided to us by the TA's. The file also uses fstream lib
+		to read in files. In read_in_file function, ifstream object
+		was created that was used to open and close the file. If it
+		was opened, the fs object was passed into the
+		copy_from_strings function to read the file untill the end of
+		the file, and interpret it using the same read_input function
+		as reading from console.
+/////////////////////////////////Compile\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+	
+	clang++ -Wall -Wextra -g -std=c++11 DoubleStack.cpp RPNCalc.cpp
+		testfile.cpp -o calc
+	You are going to need a test file in order to compile it and run
+	the test file.
+
+	Also, following header files should be included in RPNCalc in 
+	addition to the RPNCalc.h (and the DoubleStack.h & #include <iostream>
+
+		#include <csdtio> // for converting string to double
+		#include <fstream> // for reading in files
+
+////////////////////////////////////Run\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ 
+	./calc
+
+
+/////////////////////////////Data Structures\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+	This program utilizes a stack to implement the RPN calculator. The
+	reason for using a stack instead of a queue is because RPN works
+	on a Last In First Out (LIFO) method. The last item to be added
+	(pushed) is removed (popped) first. Thus, stacks are helpful for 
+	that. To create the stack, I used a linked list. I could have
+	used a sequence as well. However, I wanted more experience with 
+	linked lists. Also, linked list was helpful for stacks because
+	adding to stacks is always a insert at front function. Thus, 
+	all I had to was create a new Node, add the data in the node,
+	link the node to the current head, and then move the head to the
+	new node. For sequence, it would have required me to move every
+	element over. Nonetheless, linked list makes deleting (destructor)
+	more difficult. It requries us to create an extra pointer to the
+	node and then more head and delete the extra pointer. Then point
+	the extra pointer to the new head and repeat the process untill the
+	extra pointer is NULL. The program does not use a legitimate 
+	algorithm perse; however, it utilizes logic and data structures, like
+	stacks and linked lists to implement the logic explained above.

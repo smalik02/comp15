@@ -1,0 +1,300 @@
+
+By   : Shehryar Malik
+Date : Oct. 12. 2016
+
+================================= Purpose ===================================
+	The purpose of this program is to simulate a packaging warehouse.
+	There are multiple different components: packers, fetchers, 
+	timing, different modes of packaging.
+
+========================= Program Specifics Points ==========================
+
+- There are two main times in my program:
+	- total_time: Time it takes for the package to be shipped from the
+		time it arrives to the time it is done packing. 
+		It is divided into four main components: 
+
+			- fetch_wait_time: it is equal to the total fetch time 
+ 	 			minus the arrival time. Also, if total fetch time
+ 	 			is less than the arrival time, then total fetch time
+ 			 	will be updated to the arrival time to keep it consistent
+ 	 			For that case also, the fetch_wait_time will be zero.
+
+			- fetch_duration : given when the order is read
+
+			- pack_wait_time : is equal to the total time of the previous
+ 				package minus the start time of this package. Start time is
+ 	 			equal to the time when the package arrives to the packer.
+ 	 			Start time is equal to fetch wait time + arrival time + 
+ 	 			fetch time.
+			
+			- pack_duration  : also given the order is read
+	- print (time): Print time is similar to the global time. It takes
+		into account the arrival. It is important because an item could
+		have a very small total time, but it would arrive late. So, 
+		printing based on total_time wouldnt print the orders in the
+		correct order. 
+
+		Start time in Order.h struct is time when an order arrives
+		at the packaging unit. It is equal to the fetch_duration + 
+		fetch_wait_time + arrival_timestamp. 
+
+		Total_fetch_time (from TimeCalc) is the time the fetcher
+		has been fetching. 
+
+- To print orders that are going to be shipped at the same time,
+	I print the first order (i.e. package from the first packer
+	in the array)
+
+
+================================== Process ===================================
+	main.cpp runs the program and it is described below
+	- First, number of arguments and arguments are read through
+		 	argc and argv respectively. The second argument, index 1, 
+		 	is the filename, next is the the num_packers (which is 
+		 	converted to an int using the provided function), and then
+		 	the last argument is the packaging mode.
+		 	- Then, the run function is called, which runs the whole program
+
+		 	- Run first declares the different classes needed for
+		 	running the program (the retriever class, the TimeCalc, etc).
+		 	
+		 	- First, the retriever class array is entirely filled with all
+		 	of the orders.  The reason for that is because I can calculate
+		 	fetch wait time of all of the items at once. To do so, I use
+		 	the get_retriever() function from the Retriever class. It returns
+		 	the array of Orders, and I set the pointer to an array of Order
+		 	to that array. Then, that array is passed into the fetch_wait_time
+		 	function form the TimeCalc class.
+
+		 	- After the fetch_wait_time is determined, the next step is to
+			assign the packages to packers based on the packmode. Each packer
+			assign function takes in the retriever class, array of packers,
+			and number of packers. FewestItems and ShortestTime also take
+			in the TimeCalc class.
+
+			- After the packages have been assigned, the pack_wit_time is
+			determined using the pack_wait_time function in TimeCalc.
+
+			- After all of the segements of total_time are determined,
+			the packages are printed using the print function. Print
+			function also has numerous steps. 
+				- Firstly, all stack level variables are declared: 
+				global_min, array of total_times for all of the packages,
+				index, etc. 
+				- Then, a output file stream is created and opened, ofstream.
+				- Thirdly, a for loop run for the number of packages, and
+				it has a nested for loop as well, which runs for number
+				of packages. 
+				- For each ith package to be printed, the top print_time
+				values for all package arrays are compared and the min
+				value is selected, along with the index.
+				- Then, the value and all of the required information is
+				outputed to the file.
+				- After all the packages are printed, the array of
+				total_times is sorted using a Quick Sort algorithm.
+				- Min and max, along with the average is printed, and the
+				ofstream is closed.
+
+		The program is finally done :) 
+
+
+============================== Acknowledgements ==============================
+	Jake Gilbert and I worked on developing the base for the algorithm.
+	He helped me understand how fetch_wait_time would work and when
+	to calculate it.
+
+	Margret helped me understand that different components of the project.
+	Her main advice was, "Read the document 5+ times and just draw." 
+	It was definitely very helpful as I spent time sketching my steps out
+	numerous times throughout the project.
+
+	Numerous TAs were a great help. I discussed whether the first files
+	given to us were correct. That required me to run my algorithm through
+	them, which again brought me to some of my mistakes.
+
+	Credit goes to my Dad for telling me to use a an algorithm for sorting
+	the array of times as he, when talking over the phone, advised me 
+	to get used/comfortable with recurssion & algorithms
+
+	Some online help, like always.
+
+==================================== Files ==================================
+
+	Retriever.h:
+		This file is the definition of the retriever class. The main
+		purpose of this class to create a retriever/fetcher that is
+		going to store all of the orders before sending them to the
+		packers. 
+	
+	RoundRobin.h:
+		This file is the definition of the RoundRobin class. The class
+		is to assign packages based on the Round Robin mode.
+		RoundRobin means that the orders are assigned to each packer
+		before assigning it to the same packer.
+
+	FewestItems.h:
+		This file is the definition of the FewestItems class. This
+		mode of packaging assigns a new package from the retriever
+		sequence based on the packer with the fewest packages. 
+
+	ShortestTime.h:
+		This file is the definiton of the ShortesTime class. This
+		mode of packaging assigns a new package based on the shortest
+		total packaging time of the packer queue. To do so, we will
+		iterate through the queue and add the packaging times. 
+		I am going to try to find a better method because I dont want
+		to give access to my queue to other classes.
+
+	TimeCalc.h:
+		This file is the definition of the TimeCalc class. The class
+		has two functions that calculate fetch_wait_time and 
+		pack_wait_time. These two times are not the most obvious
+		among all the components of the total_time.
+
+	Order.h:
+		This file is the definition of the Order struct. Order struc
+		has an Id for the package. It has the fetch_duration,
+		pack_duration, pack_wait_time, fetch_wait_time, total_time,
+		fetch_time_left, and pack_time_left. As of now, I am not using
+		fetch_time_left and pack_time_left. I plan on incorporating
+		them and making some of my time calculations easier.
+
+	Orderqueue.h:
+		This file is the definition of the Orderqueue class. The
+		purpose of this file is to define and lay out the format
+		of the class, such as function defintions, both private &
+		public.
+
+	Orderqueue.cpp:
+		This file is the implementation of the Orderqueue.h class.
+		The functions include the two main queue functions: enqueue &
+		dequeue. Other private members inlcude clear which is called
+		by the destructor. It has a public size function which is
+		called by the FewestItem class when assiging the packages.
+
+	Parser.h:
+		This file is the definition of the Parser class. Its main
+		purpose is to read in the order file and parse through it.
+		It returns an order struct with int values. Its used
+		by the run function in main.cpp to fill the retriver sequence
+		with orders.
+
+	string2int.h:
+		This file converts string into an integer. It was provided
+		to us and I have not made any modification.
+
+	string2int.cpp: 
+		The file contains the function definition of the function that
+		converts a string arg into an int. It is used by main.cpp to 
+		convert string number of packers to int.
+
+	Parser.cpp:
+		It implements a Parser class that parses a Nozama input file and
+ 		returns each Order it specifies, one by one. I modified a little bit
+ 		of it because I added variables to the Order.h struct. Thus, those
+ 		values had to be initialized as well.
+
+ 	TimeCalc.cpp:
+ 		This file is the implementation of the TimeCalc class. The class
+		is used to calculate different components of the total_time 
+ 		for each Order. 
+		The total_time is broken down into four different components:
+	 	fetch_wait_time (time waiting in the retriever)
+	 	fetch_time (time it takes the retriever to get the package to packers)
+	 	pack_wait_time (time it waits in the packer's queue)
+	 	pack_time (time it takes to pack)
+
+	ShortestTime.cpp:
+	 	This file is the implementation of the ShortestTime class,
+		which adds the packages based on the shortest packaging
+		time of all the current packages in the packer queues.
+		The main function is the assign_package function. To determine
+		which packer has the shortest time, the print_time of the last
+		item is compared among all of the packers.
+		print time is used because it tells at what time the package
+		is going to exit the queue and be shipped.
+
+	FewestItems.cpp:
+		This file is the implementation of the FewestItems class, which 
+		assigns packages based on the fewest items left among the packer 
+		queues.
+		The main function is the assign_package function. To determine
+		which packer has the fewest items we will use the int min, which
+		will be set to zero when the function is called, to determine 
+		the current min and iterate through the packer array and call 
+		the size function.
+
+	RoundRobin.cpp:
+		This file is the implementation of the RoundRobin class. The class is
+		used to assign packages in order (one by one to each packer)
+		The class is used by the main.cpp in run function as it will be 
+		called to assign packages. 
+		The assign_package function is the main function because it assigns
+		the packages to the packers. 
+
+	Retriever.cpp:
+		This file is the implementation of the Retriever class. The class is
+  		used to create the retriver array that holds the orders before they
+ 		are sent to the packers by run in main.cpp. The array is also 
+		dynamic array. 
+
+=============================== Compile & Run ================================
+
+	Compile : make
+	Run     : ./test <input_file_name> num_packers Pack_Mode
+
+==================== Algorithm & Data Structure Discussion ===================
+
+Main part of the program is the data structure used to store the packaging
+units for the packers, the Orderqueue class. Orderqueue class uses a queue
+store the orders as they come in because queue is First In First Out, whcih
+makes sense because Orders that come in first are going to leave first.
+The data sturcture is very simple (enqueue, dequeue, empty, size, etc);
+however, for the purpose of the program, there are other functions too that
+allow the user to determine certain things about the queue without have
+a direct access. For example, there is a top_total_time function which is used
+by the print function to determine the print time of the top element in the
+queue in order to compare them and determine the min. 
+
+The Retriever class uses a sequence/dynamic array because the purpose is to
+only add and remove from the top. Thinking back on the project, I feel like
+I should have used a linked list for it as well becuase linkedlist are strong
+when it comes to adding (given there is a tail) and removing from the front.
+Since I was never really messing with the center of the array, the strength of
+arrays was not really used. Nonethless, syntax for array is alot easier.
+
+Quick Sort Algorithm:
+	I implemented quick sort algorithm to sort the arrays because I wanted
+	to make it efficient, my dad said I should really start implementing
+	algorithms in my code, and I had free time to implement his advice.
+	Quick Sort is a pretty simple algorithm. It has the following setps:
+		- It determines a pivot (the middle of the array)
+		- Then elements less than the pivot are moved to the left, and 
+			greater are moved to the right. This is occured numerous
+			time until pivot reaches the central point, the final
+			position.
+		- Then, the process is recurssed using the above steps, but
+			with the sub arrays. 
+		The reason for implementing the alogorithm was because it
+		reduces the time and the complexity. It is usually O(n ln(n)).
+		I had help of the internet in determining the complexity. 
+
+Program Design:
+	I decided to use the math version to do the program because I 
+	really just understood it that way. I usually think of program as
+	step by step. Therefore, I felt like math version would allow me to 
+	accomplish it step by step. 
+	Also, I looked at the output that was required, and I realized that 
+	all we needed was the total time of the package which depended upon
+	specific things no matter what package you were. From there onwards,
+	I drew numerous examples to create my algorithm.
+	One downside was that I had to consider a lot of corner cases with
+	the math version. For example, what if the pakage's arrival time was
+	far greater than the total_fetch_time, you couldnt just update it with
+	the fetch_duration because the change in the time arrivals would skew
+	the print time (start time first) and thus the print order. 
+	Nonetheless, these corner cases allowed me to make a robust algorithm
+	because I had to go back numerous times and add or remove different
+	components.
+	Personally, I wish I had 2 more days to further fine tune the program.

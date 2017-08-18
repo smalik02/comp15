@@ -1,0 +1,178 @@
+Name: Shehryar Malik
+Date: Dec. 2. 2016
+
+Project: Gerp - It's Like grep But Something Is Off
+
+Purpose: 
+
+	The purpose of this program is to act like a search/query for
+	finding a word in a given file. The user can give the program
+	a directory to index, and then the user can search the index, and
+	the program will return the file path and the line number of the
+	instance of the word. The program can also perform a case insensitive
+	search. Moreover, the program is a mini search engine!
+
+Acknowledgements:
+
+	TA's all around were great. Bill helped a lot during the design part.
+	Max was helpful in debugging a really dumb seg fault. 
+
+	Also, HUGE SHOUTOUT TO KELL POGUE for helping me out when the TAs were
+	very busy and I was dying.
+
+	Another last minute clutch help from Mark Sheldon. He told me that I was
+	storing the file_names too many times which was causing too much memory
+	usage. i.e. my 13 hrs of trying to fix it was fixed in 30 mins!!!!!!!!
+
+	Last minute shoutout to Eliza for staying late on Friday. It was really
+	helpful for a lot of the students.
+
+	I would also like to acknowledge this project for really really making my
+	week hard. But, it was a really great project designed for Data
+	Structures. For example, I had the search done on Wednesday morning. I
+	spent the next 3 days solely working on optimizing my data usage and
+	data structures. So it was a really good project.
+
+Compile & run:
+
+	Makefile is included in the program. Thus, you can compile using:
+		make
+
+	To run:
+		Usage:  ./gerp directory
+		where:  directory is a valid directory
+
+		To search a word: 
+
+Architectural Overview:
+
+	There are two main components that the user uses to run the index and
+	search. To index everything, the user calls the File_Manager's
+	traverse_directory function. Then, the files are read in line by line
+	from the Gerp Class's parse_file function. Gerp then parses the file
+	line by line, and word by word, and passes the word onto the Trie to add.
+	
+	The Trie class handles the adding to the trie. It checks if the node
+	has a child at that index, meaning if the children at the ASCII value
+	of the char of the word is not NULL. If it has a child, then the
+	temp node is moved to that child and its looped untill the whole
+	word is added.
+
+	If the child does not exist, then, a new node is created and the 
+	child is appended to the parent.
+
+	For the search component, the user calls the search function in 
+	Gerp with the specified mode. Gerp then calls the trie
+	search function to search the provided word. The Trie search function
+	will return a vector of Line_Info, containing the line numbers and
+	file names. If the word was found, then Gerp's search function calls
+	helper find_file_index to determine the index for the file name
+	in the lines vector of vector of strings (vector that stores all of 
+	the lines in a given file when the file is being read in Gerp parse_file)
+	Then, Gerp calls the helper print function to print the output with the
+	appropiate file_path and line number, along with the line itself.
+
+	Overall, here is the overview of how different classes have access to
+	different classes:
+
+		- main.cpp (Interface for the program):
+			- File_Manager.h
+			- Gerp.h
+		- File_Manager (traversing the FSTree)
+			- FSTree.h
+			- Gerp.h
+		- Gerp (main interface for building and searching the index)
+			- Trie.h
+		- Trie (The main data structure for indexing, a Trie)
+			- Node.h
+		- Node (class for each node)
+
+Data Structures & Algorithms:
+	
+	For Indexing:
+		- I use a Trie as my main data structure for storing and indexing
+		the words. There are few advantages for using a trie. The reason
+		why I used a trie was because I knew that I would have to search
+		all of the words. Thus, I felt like I could optimize my memory
+		a little bit, given that there are only limited number of words
+		in the english dictionary, and the words would also build upon each
+		other.
+		Also, the search time for a trie is not terrible, as it is dependent
+		upon the length of the word. Given that most of the words are not
+		that long, the linear time search would be pretty fast, close to
+		constant time.
+
+		Nonetheless, there are few downsides for a trie. It can take up
+		more storage, especially given that each node has around 96
+		children, except the leaves.
+		Also, since, for the insensitive case, I create another
+		trie, two tries can use a lot of memory.
+		In addition, if the words are long and the trie gets full, then
+		the search will also be a little slow as it would have to go through
+		a lot of nodes.
+
+		I used two tries because I realized that it would be a faster
+		way to indexing given that I have a trie. Also, since the user
+		does not specify the search mode after the indexing is done, the
+		other opetion would be that I would compare the ASCII values and
+		differentiate between lowercase and uppercase. However, I wanted to
+		make my search close to constant. Therefore, having two different
+		tries allowed me to reach that. 
+
+	For Storing lines:
+		- I used a vector of vectors to store the file lines. I did this
+		because I did not want to store the same line numerous times. Also,
+		since I have the index of the file_name when I push the file_name on
+		to the vector, and the line number of the word is stored, I can make
+		search constant. 
+		Also, since its a vector, I do not have to worry about expanding the
+		size as I am pushing on more data, which serves as an advantage!
+		However, at the same time, vector could grow a lot more than I end
+		up using because the vector expands dynamically.
+
+	Node Line_Info:
+		- I used a struct to store the information once a word is found.
+		The struct has an int line number and int file index. Initially,
+		I was using a string instead of an int for file index, as I was
+		storing the filename. However, it meant that the same filename
+		would be stored a lot and a lot of times. It lead to huge memory
+		usage and killed my program on Large Gutenburg.
+		Using an int instead of string was better because string is just
+		another struct/class that has its own data members and has a lot
+		of memory usage!
+
+Testing:
+	This was a pretty big project. For testing, I ran my program solely
+	on the proj2test files. I did make some empty files, but, I felt like
+	that given the file sizes, if my program runs, then it should be able
+	to handle different tests.
+
+	There was one major problme in my program:
+		- MEMORY
+			I was using a lot of memory. To debug that, I spent a lot of
+			time trying to fix the memory usage. I made a lot of my
+			returns and args reference based because as a result, I would
+			not be copying vectors and strings over. 
+			Furthermore, to determine where most of my memory usage was, 
+			I ran valgrind with --tool=callgrind to determine where most of
+			my program was spending time. I saw that it was mostly on
+			strings creation and vectors. Also, there was a lot of
+			mention of Line_Info. 
+			So, I just eliminated the addition of Line_Info vectors into
+			lines in Trie.cpp, and my memory usage droped from ~900 MB to
+			~400 MB.
+			After sketching out the node and realizing that string itself
+			is an object, like it has a size, capacity and data pointer, it
+			was being copied numerous times as I was storing it in every
+			node.
+			I converted the string name to int file_index, because I was 
+			converting the file_names to index when printing. But now,
+			I did that in my indexing. Thus, I made my search faster, and
+			reached a good memory usage level, after 18 hrs+ of crying
+
+	I also used valgrind and gdb a lot to determine segfaults. I threw
+	in a lot of cerr and couts to check where they were occuring. They
+	really helped a lot in narrowing down the problem.
+
+	Overall...the testing was more of debugging than actually running the
+	test files and comparing the outputs.

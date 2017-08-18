@@ -1,0 +1,49 @@
+Comp15 HW2: CharLinkedList
+Shehryar Malik
+
+Acknowledgements: Jake Gilbert was a great help throughout the project
+
+Purpose: To perform numerous tasks using doubly linked list such as
+	insert a new node, remove nodes, concatenate nodes, replace
+	elements, etc. Overall, it provides a great understanding 
+	into how a very useful data structure works.
+
+Files: 
+
+	CharLinkedList.h: This file is the implementation of the 
+			CharLinkedList Class. It defines all of the functions,
+			both public and private.
+
+	CharLinkedList.cpp: This file is the implementation of the 
+			CharLinkedList Class. The file details every function.
+			The file contains the constructors, destructor, and
+			other operation functions for the class. In addition,
+			it provides perspective into how the class really
+			works and the logic behind it.
+
+	testCharLinkedList.cpp: This file is the test file for the program.
+			It test all of the functions, base cases and corner
+			cases. This file really ensures that the functions
+			work as they are supposed to. The file is really
+			divided into few parts: breaking down testing into
+			few different phases.
+
+Compile & Run: 
+
+	Compile: clang++ -Wall -Wextra -g testCharLinkedList.cpp
+ 					CharLinkedList.cpp -o test
+
+	test: ./test
+
+Data Structure: 
+
+	In this program, Linked List data structure is used. Linked List
+	consists of nodes that are connected to each other via pointers.
+	In this case, we used doubly linked lists, which means that the nodes
+	were not only connected to the next node in the list, but also the
+	previous node. This created some problem: making sure that pointers
+	were addressed correctly. In addition, it led to the recurssion
+	solution to the copy function being more tricky. Nonetheless, it adds
+	more usefulness to the list, as I created a tail node, just like a
+	head node. Therefore, when adding at back or removing, I just
+	pointed directly to it.

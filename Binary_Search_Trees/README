@@ -1,0 +1,173 @@
+Name : Shehryar Malik (smalik02)
+Date : Oct. 26. 2016
+
+HW4  : Tree-Mendous Alphabetizer - Binary Search Tree
+
+Purpose:
+	The purpose of the program is two pronged. Firstly, the StringBST
+	is used for creating a binary search tree. Secondly, Alphabetizer
+	class is used for interfacing the StringBST class by printing, in
+	order or in reverse order, input taken in from the console input
+	or file input stream. 
+	Generally, the purpose is to use a binary search tree as a data
+	structure in order to perform operations such as contains, remove
+	getMin, print, etc.
+
+Acknowledgements:
+	Prof. Mark for helping with breaking down the remove problem in the
+	class. My remove algorithm is mostly based upon what he discussed in
+	class: breaking it down into smaller cases.
+
+	Margret for helping out throughout the project.
+
+	Stackoverflow and the internet for helping with reading input from
+	cin and determing when it is done.
+
+Files:
+	StringBST.h & StringBST.cpp:
+		These files are the definition and the implementation of the
+		binary search tree class, respectively. Linked List data
+		sructure is used to build the binary search tree. The left side
+		or child is always less than the parent, and right is always
+		greater. The classes interface is used by the Alphabetizer class.
+
+	Alphabetizer.h & Alphabetizer.cpp:
+		These files are the definition and the implementation of the
+		alphabetizer class, respectively. The main purpose of this
+		class is read input in two different modes, interactive (cin) &
+		file input stream. It then uses the StringBST to store the input
+		and print the result, either in order or reverse order,
+		alphabetically.
+
+	AlphaTesting.cpp:
+		This is the test file for the alphabetizer class. Its main
+		purpose was to help me debug my code. I found it very useful.
+		More detailed description of testing is described below in the
+		discussion section.
+
+	BSTTesting.cpp:
+		This file is a test file for the StringBST class. It has numerous
+		smaller functions that test different functions. For example,
+		there is remove test function. This file was of great use becuase
+		it allowed me to write my code in a more modular and unit-testing
+		way.
+
+	main.cpp:
+		This file serves as the user for the alphabetizer class. Its main
+		purpose is to read in commands and arguments from the user and 
+		determine whether to throw an exception, call the interactive run
+		function, or file input stream run function.
+
+Compile & Run:
+	Compile:
+		clang++ -Wall -Wextra -g -std=c++11 StringBST.cpp Alphabetizer.cpp \
+		main.cpp -o alphabetizer
+	Run:
+		Two different modes:
+			- Interactive: 
+				./alphabetizer
+				Then input f or r for in order or reverse print
+				& the input. To end the input stream, press Ctrl-D
+			- File Input:
+				./alphabetizer [f or r] [filename]
+
+Data Structures:
+	For this program, I used one main data structure: Binary Search Tree.
+	Binary search tree was built using linked list (with two pointer nodes).
+	Binary Search Trees are very helpful because they allow indiviuals to 
+	store data in a more sorted manner. Therefore, commands such as insert, 
+	add, remove at, getMin/Max, & contains become faster and easier as their
+	complexity drops from n or worse to log n. The reason for that is because
+	of the invariant of the BST: The left child is always smaller than the
+	parent, and the right child is always bigger.
+
+Algorithms:
+	For Insert:
+		I had a base case in where there is an empty tree, i.e. root == NULL.
+		I handled that case in the add function. An instance of the Tree was
+		created an information was added. If the tree was not empty, then
+		the recursive part was called, add_recurse, which takes in a node
+		pointer, parent pointer, and the input string. 
+		The recusive function's base case was also the same, if the node
+		was null, then the function was added. However, in addition to just
+		creating a new instance, node had to be placed into the tree, either
+		left or right. Therefore, the parent node's value was compared and
+		then added appropriately, and returned.
+		There was also another case, if the string already exited, then the
+		num_strings was increased of that node, and returned.
+		The recursive part was pretty simple. If the value being added was
+		less than the current node's value, then its left subtree was
+		traversed. Else, the right subtree was traversed. This allowed for
+		the complexity to be log n.
+
+	For Remove:
+		The remove function had many different cases. The remove function
+		checked if the root was NULL, empty tree, and returned false. 
+		If not, then a boolean value was created, deleted. It was passed
+		by reference to the remove_recurse function as the function type
+		was Tree node pointer.
+		
+		The Base case was if the node was NULL, and then the deleted boolean
+		was set to false, and the node was returned. This would happen
+		if the tree was unable to find the string in the tree.
+		
+		First recursive part was if the input value was less than the
+		node's value, the left subtree was traversed, and right otherwise.
+		
+		If the node's value was equal to the input value, then there were
+		three main cases.
+		
+		If the number of strings was greater than 1, then the num_strings
+		was decremented, deleted was set to true, and the node was retruned.
+		
+		If the a node had no child or just one child, a temp node was created
+		that got that node's left or right child (could be NULL and in which
+		case, it would just be null), depending upon if node's left child was
+		NULL or right was NULL, respectively. Then, the node was deleted, 
+		deleted boolean was set to true, and the temp node was returned.
+		
+		Final case, a more complex one, was if the node had two children.
+		A temp Tree pointer got the value of the min value in the right
+		subtree. To do that, I created a helped function, getMinNode, which
+		returned the pointer to the min node in the subtree of the given
+		node. Current node got the data of the temp min node. Then, node's
+		right child was set to the node returned by deleting the min node in
+		the right subtree. To do that, the function was recursed again, 
+		but with the node's right child, temp's data (input string), and
+		the deleted boolean. Since that string exists in the tree, it will
+		be deleted again. 
+
+Testing:
+	AlphaTest.cpp:
+		This test was simple because the testing depended upon the user input
+		from the console and the input files.
+		I tested on the file input stream many times. I tried to throw errorrs
+		by flipping the order and filename in the file input stream. I added
+		too many arguments. I tested the tree by having an empty file, with
+		just f or r.
+		There were not many other cases. I created trees and printed them out
+		in reverse and forward order. I compared them with my own drawings
+		and the printing by hand.
+
+		For the console, I followed a similar approach. I tested many cases.
+		I had a different letter for the first input, other than f or r.
+		I tried to print an empty tree. And then I tested numerous trees.
+		For example, I tested a case where there was no left subchild of the
+		root. I tested with just few nodes.
+
+	BSTTestig.cpp:
+		For this file, I created smaller test functions. For the first test
+		function, i tested the base cases for most of the functions. I did 
+		this mostly becaue I tested my functions one by one when I was 
+		writing my program. I then tested main functions thoroughly. For
+		example, I tested the remove function with numerous edge cases.
+		I tested just removing a node. Removing a node with one child.
+		Removing a node with more than one instance. Removing a root.
+		Removing a node with two children. 
+		I applied a similar approach for the other test functions. I also
+		added some test functions from provide that I failed in order to
+		determine where I was failing. Overall, the unit testing approach
+		helped me a lot with recursive functions. I usually build my code
+		and then test at the end. However, doing small tests made my 
+		life easier as I knew if something wasnt working. Also, I didnt
+		have to seperately make a test file afterwards.

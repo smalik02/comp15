@@ -1,0 +1,8 @@
+f
+this is a test of standard input
+these words will be passed to the alphabetizer
+through redirection. The exact command:
+
+cat stdin.alp | ./alphebatizer
+
+try it out for yourself

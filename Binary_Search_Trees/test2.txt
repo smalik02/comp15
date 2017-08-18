@@ -1,0 +1,10 @@
+f <-- note, this isa word!
+
+This tests file input to your alphebatizer
+note that we will read the starting 'f' as
+a string, not an output mode. The exact command
+being run (without quotes):
+
+./alphebatizer "f" "filein.alp"
+
+Try it out for yourself!
